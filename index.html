@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CheapFlights — Find cheap flights</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="CheapFlights - Search and book flights.">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <div class="brand">
+        <img src="assets/logo-cheapflights.png" alt="CheapFlights logo" class="logo">
+        <h1 class="site-title">CheapFlights</h1>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="flights.html">Flights</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-left">
+          <h2>Find cheap flights — book faster</h2>
+          <p>Search thousands of routes and compare prices instantly.</p>
+
+          <form id="search-form" action="results.html" method="GET" class="search-form">
+            <div class="row">
+              <input name="from" id="from" placeholder="From (e.g. CPT)" required>
+              <input name="to" id="to" placeholder="To (e.g. JNB)" required>
+            </div>
+            <div class="row">
+              <input type="date" name="depart" required>
+              <input type="date" name="return">
+            </div>
+            <div class="row">
+              <select name="passengers" id="passengers">
+                <option value="1">1 passenger</option>
+                <option value="2">2 passengers</option>
+                <option value="3">3 passengers</option>
+              </select>
+              <button class="btn" type="submit">Search flights</button>
+            </div>
+          </form>
+
+        </div>
+        <div class="hero-right">
+          <img src="assets/hero.jpg" alt="Travel illustration" class="hero-img">
+        </div>
+      </div>
+    </section>
+
+    <section class="features container">
+      <div class="feature">
+        <h3>Compare prices</h3>
+        <p>See the best fares from multiple carriers in one place.</p>
+      </div>
+      <div class="feature">
+        <h3>Secure payments</h3>
+        <p>Card or QR payments through Paystack.</p>
+      </div>
+      <div class="feature">
+        <h3>Easy booking</h3>
+        <p>Simple booking flow and email confirmations.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>© <span id="year"></span> CheapFlights</div>
+      <div class="footer-links">
+        <a href="about.html">About</a> · <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

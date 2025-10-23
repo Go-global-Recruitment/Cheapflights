@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CheapFlights — Flights</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <div class="brand">
+        <img src="assets/logo-cheapflights.png" alt="CheapFlights logo" class="logo">
+        <h1 class="site-title">CheapFlights</h1>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="flights.html" class="active">Flights</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Search flights</h2>
+    <form id="search-form-2" action="results.html" method="GET" class="search-form">
+      <div class="row">
+        <input name="from" id="from2" placeholder="From (e.g. CPT)" required>
+        <input name="to" id="to2" placeholder="To (e.g. JNB)" required>
+      </div>
+      <div class="row">
+        <input type="date" name="depart" required>
+        <input type="date" name="return">
+      </div>
+      <div class="row">
+        <select name="passengers">
+          <option value="1">1 passenger</option>
+          <option value="2">2 passengers</option>
+        </select>
+        <button class="btn" type="submit">Search flights</button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>© <span id="year2"></span> CheapFlights</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year2').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+// paystack.js
+(function(){
+  function getBookingSummary(){
+    var priceText = localStorage.getItem('cf_price') || 'NGN 150,000';
+    // Extract numeric amount in Naira (assumes "NGN 150,000")
+    var num = (priceText.match(/[\d,]+/)||['150000'])[0].replace(/,/g,'');
+    return { amount: parseInt(num,10), priceText };
+  }
+
+  var payBtn = document.getElementById('payInline');
+  var qrBtn = document.getElementById('generateQR');
+  if(payBtn){
+    payBtn.addEventListener('click', function(){
+      var name = document.getElementById('fullName').value || 'Guest';
+      var email = document.getElementById('email').value || 'guest@example.com';
+      var booking = getBookingSummary();
+      // Paystack expects amount in kobo -> multiply by 100
+      var amountKobo = booking.amount * 100;
+      // IMPORTANT: Replace the publicKey below with your Paystack test/live public key
+      var publicKey = 'pk_test_REPLACE_WITH_YOUR_KEY';
+      if(publicKey.indexOf('REPLACE') === 0){ alert('Please set your Paystack public key in js/paystack.js'); return; }
+
+      var handler = PaystackPop.setup({
+        key: publicKey,
+        email: email,
+        amount: amountKobo,
+        currency: 'NGN',
+        ref: 'CF' + Math.floor((Math.random()*1000000000)+1),
+        callback: function(response){
+          alert('Payment success. Ref: ' + response.reference);
+          // after payment: you should verify on server-side using Paystack secret key
+          // here we just redirect to a simple confirmation (or thank you)
+          window.location.href = 'index.html';
+        },
+        onClose: function(){
+          alert('Payment window closed.');
+        }
+      });
+      handler.openIframe();
+    });
+  }
+
+  if(qrBtn){
+    qrBtn.addEventListener('click', function(){
+      // For QR we generate a simple deep link to your Paystack payment page.
+      // In a real production flow you would call your backend to create a transaction with Paystack,
+      // get a payment authorization_url or reference, and build a proper QR for it.
+      var booking = getBookingSummary();
+      var amount = booking.amount;
+      var paymentUrl = 'https://paystack.com/pay/REPLACE_WITH_TRANSACTION_ID'; // placeholder
+      // show qr
+      document.getElementById('qrcodeContainer').classList.remove('hidden');
+      document.getElementById('qrcode').innerHTML = '';
+      new QRCode(document.getElementById('qrcode'), paymentUrl + '?amount=' + amount);
+      alert('QR generated. Replace paymentUrl with your server-created Paystack transaction URL for real payments.');
+    });
+  }
+
+  // expose helpers
+  window._cf_paystack = {
+    setPublicKey: function(k){ /* not used in this static demo */ }
+  };
+
+})();

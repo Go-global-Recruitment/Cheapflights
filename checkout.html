@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CheapFlights — Checkout</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <div class="brand">
+        <img src="assets/logo-cheapflights.png" alt="CheapFlights logo" class="logo">
+        <h1 class="site-title">CheapFlights</h1>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="flights.html">Flights</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container checkout-page">
+    <h2>Checkout</h2>
+
+    <div class="card" id="order-summary">
+      <!-- injected by JS -->
+    </div>
+
+    <div class="payment-actions">
+      <button id="pay-button" class="btn">Pay with Card</button>
+      <button id="pay-qr" class="btn alt">Show QR code</button>
+    </div>
+
+    <div id="qr-area" class="qr-area" style="display:none;">
+      <p>Scan to pay:</p>
+      <div id="qrcode"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>© <span id="year5"></span> CheapFlights</div>
+    </div>
+  </footer>
+
+  <!-- Paystack inline -->
+  <script src="https://js.paystack.co/v2/inline.js"></script>
+  <!-- QR generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script src="js/paystack.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('year5').textContent = new Date().getFullYear();
+
+    (function loadOrder(){
+      const flight = JSON.parse(localStorage.getItem('selectedFlight') || 'null');
+      const pax = JSON.parse(localStorage.getItem('passengerInfo') || '{}');
+      if (!flight) {
+        document.getElementById('order-summary').innerHTML = '<p>No order found. Go back to <a href="results.html">results</a>.</p>';
+        document.querySelector('.payment-actions').style.display = 'none';
+        return;
+      }
+      document.getElementById('order-summary').innerHTML = `
+        <h3>Order summary</h3>
+        <p>${flight.airline} ${flight.from} → ${flight.to}</p>
+        <p>${flight.depart} • ${flight.time}</p>
+        <p>Passenger: ${pax.firstName || ''} ${pax.lastName || ''} (${pax.email || ''})</p>
+        <p><strong>Total:</strong> ${flight.currency} ${flight.price}</p>
+      `;
+
+      document.getElementById('pay-button').addEventListener('click', function(){
+        // Use paystack.js helper - it expects amount in smallest currency unit (e.g., kobo/cents)
+        const amountInCents = Math.round(parseFloat(flight.price) * 100);
+        PaystackCheckout({
+          email: pax.email || 'guest@example.com',
+          amount: amountInCents,
+          currency: flight.currency || 'NGN',
+          onSuccess: function(ref){
+            alert('Payment successful: ' + ref);
+            // optionally redirect to success page
+            window.location = 'index.html';
+          },
+          onClose: function(){
+            alert('Payment window closed.');
+          }
+        });
+      });
+
+      document.getElementById('pay-qr').addEventListener('click', function(){
+        const fakePaymentUrl = 'https://pay.cheapflights/qr/' + (Math.random().toString(36).slice(2,10));
+        document.getElementById('qr-area').style.display = 'block';
+        document.getElementById('qrcode').innerHTML = '';
+        new QRCode(document.getElementById('qrcode'), { text: fakePaymentUrl, width: 200, height: 200 });
+      });
+    })();
+  </script>
+</body>
+</html>

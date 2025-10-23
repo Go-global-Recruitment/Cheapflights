@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CheapFlights — Results</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <div class="brand">
+        <img src="assets/logo-cheapflights.png" alt="CheapFlights logo" class="logo">
+        <h1 class="site-title">CheapFlights</h1>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="flights.html" class="active">Flights</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container results-page">
+    <h2>Available flights</h2>
+    <div id="results-list" class="results-list">
+      <!-- Flight cards injected by JS -->
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>© <span id="year3"></span> CheapFlights</div>
+    </div>
+  </footer>
+
+  <script src="js/flights-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('year3').textContent = new Date().getFullYear();
+    renderResults(); // from flights-data.js
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CheapFlights — Booking</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <div class="brand">
+        <img src="assets/logo-cheapflights.png" alt="CheapFlights logo" class="logo">
+        <h1 class="site-title">CheapFlights</h1>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="flights.html">Flights</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container booking-page">
+    <h2>Complete your booking</h2>
+
+    <div id="selected-flight" class="card selected-flight">
+      <!-- Selected flight details injected by JS -->
+    </div>
+
+    <form id="passenger-form" class="passenger-form">
+      <h3>Passenger details</h3>
+      <div class="row">
+        <input name="firstName" placeholder="First name" required>
+        <input name="lastName" placeholder="Last name" required>
+      </div>
+      <div class="row">
+        <input name="email" placeholder="Email" type="email" required>
+        <input name="phone" placeholder="Phone" required>
+      </div>
+
+      <div class="row">
+        <button class="btn" type="submit">Proceed to payment</button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>© <span id="year4"></span> CheapFlights</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('year4').textContent = new Date().getFullYear();
+    // Load selected flight from localStorage (set when user selects on results)
+    (function loadSelected(){
+      const flight = JSON.parse(localStorage.getItem('selectedFlight') || 'null');
+      const el = document.getElementById('selected-flight');
+      if (!flight) {
+        el.innerHTML = '<p>No flight selected. Go back to <a href="results.html">results</a>.</p>';
+        document.querySelector('.passenger-form').style.display = 'none';
+        return;
+      }
+      el.innerHTML = `
+        <h3>${flight.airline} — ${flight.from} → ${flight.to}</h3>
+        <p>${flight.depart} • ${flight.time} • ${flight.duration}</p>
+        <p>Fare: ${flight.currency} ${flight.price}</p>
+      `;
+    })();
+
+    document.getElementById('passenger-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      // Save passenger and redirect to checkout
+      const data = Object.fromEntries(new FormData(e.target));
+      localStorage.setItem('passengerInfo', JSON.stringify(data));
+      window.location = 'checkout.html';
+    });
+  </script>
+</body>
+</html>
